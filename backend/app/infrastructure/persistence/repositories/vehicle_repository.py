@@ -52,12 +52,12 @@ class SqlVehicleRepository(IVehicleRepository):
         return False
 
     def search(self, make: Optional[str] = None, model: Optional[str] = None) -> List[Vehicle]:
-        query = self.db.query(Vehicle)
-        if make:
-            query = query.filter(Vehicle.make.ilike(f"%{make}%"))
-        if model:
-            query = query.filter(Vehicle.model.ilike(f"%{model}%"))
-        return query.all()
+      query = self.db.query(Vehicle)
+      if make:
+          query = query.filter((Vehicle.make.ilike(f"%{make}%")) | (Vehicle.model.ilike(f"%{make}%")))
+      if model:
+          query = query.filter((Vehicle.make.ilike(f"%{model}%")) | (Vehicle.model.ilike(f"%{model}%")))
+      return query.all()
 
     def search_and_filter(
         self,
@@ -76,9 +76,9 @@ class SqlVehicleRepository(IVehicleRepository):
         query = self.db.query(Vehicle)
 
         if make:
-            query = query.filter(Vehicle.make.ilike(f"%{make}%"))
+            query = query.filter((Vehicle.make.ilike(f"%{make}%")) | (Vehicle.model.ilike(f"%{make}%")))
         if model:
-            query = query.filter(Vehicle.model.ilike(f"%{model}%"))
+            query = query.filter((Vehicle.make.ilike(f"%{model}%")) | (Vehicle.model.ilike(f"%{model}%")))
         if category:
             query = query.filter(Vehicle.category == category)
         if min_price is not None:
