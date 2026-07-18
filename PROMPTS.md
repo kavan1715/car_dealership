@@ -266,4 +266,63 @@
 *   **AI Response Summary**:
     Explained the concepts of the Repository Pattern, Service Layer, and separating business logic from routes. Wrote custom domain exceptions (`UserAlreadyExistsException`, `UserNotFoundException`, `VehicleNotFoundException`, `OutOfStockException`, `InvalidQuantityException`). Defined abstract repository interfaces (ports) `IUserRepository` and `IVehicleRepository`. Developed comprehensive unit tests for all repository and service methods (TDD RED). Implemented `SqlUserRepository` and `SqlVehicleRepository` SQLAlchemy database adapters and created `UserService` and `VehicleService` containing validation and transaction rules (TDD GREEN). Configured FastAPI-compatible dependency injection modules. Updated README.md and stopped for review.
 
+---
+
+### Prompt #6
+*   **Date**: 2026-07-18
+*   **Prompt Title**: Phase 6 - Vehicle CRUD APIs
+*   **Complete Prompt**:
+    ```text
+    Let's begin Phase 6.
+
+    You are acting as a Senior Full Stack Software Engineer and Technical Lead mentoring me through this placement assessment.
+
+    Continue from the existing project without recreating or modifying completed work unless absolutely necessary.
+
+    ==========================================================
+    PHASE 6 – VEHICLE CRUD APIs
+    ==========================================================
+
+    Objective
+
+    Implement a production-ready Vehicle Management module following Clean Architecture, SOLID principles, Repository Pattern, Service Layer Pattern, and strict Test-Driven Development (TDD).
+
+    Only implement CRUD functionality for vehicles.
+
+    Do NOT implement Search, Purchase, Restock, Dashboard Statistics, or Frontend in this phase.
+
+    ==========================================================
+    EXPLAIN FIRST
+    ==========================================================
+    Before writing any code, explain:
+    1. What CRUD operations are.
+    2. Why CRUD is separated from business logic.
+    3. Why Admin-only operations require authorization.
+    4. Explain the request flow: Client -> API Route -> DI -> Service -> Repository -> Database (explaining each layer's responsibility).
+
+    ==========================================================
+    API ENDPOINTS
+    ==========================================================
+    POST /api/vehicles (Admin Only)
+    GET /api/vehicles (Authenticated Users)
+    GET /api/vehicles/{id} (Authenticated Users)
+    PUT /api/vehicles/{id} (Admin Only)
+    DELETE /api/vehicles/{id} (Admin Only)
+
+    ==========================================================
+    SCHEMAS, SERVICE, REPOSITORY, DI, TDD & QUALITY
+    ==========================================================
+    Create separate Pydantic schemas (VehicleCreate, VehicleUpdate, VehicleResponse, VehicleListResponse).
+    Service Layer: Validate vehicle data, raise exceptions, no SQL.
+    Repository Layer: CRUD database operations.
+    DI: Inject db session, current user, current admin, VehicleService.
+    TDD: Write Repository, Service, and API tests before implementation. Maintain high test coverage.
+    Return proper HTTP status codes. Follow SOLID, Clean Architecture, PEP8.
+    Do NOT implement search/purchase/restock/dashboard stats.
+    Append to README.md and PROMPTS.md. Provide Phase Report. Do not push. Stop for confirmation.
+    ```
+*   **AI Response Summary**:
+    Explained CRUD operations, separation of concerns, and the request flow from API route down to database. Updated the `IVehicleRepository` port, `SqlVehicleRepository` adapter, and `VehicleService` to support pagination and count methods. Wrote Vehicle Pydantic validation schemas (`VehicleCreate`, `VehicleUpdate`, `VehicleResponse`, `VehicleListResponse`). Developed comprehensive unit tests for repository pagination, service validation rules, and API route CRUD endpoints (TDD RED). Created `POST /api/v1/vehicles`, `GET /api/v1/vehicles`, `GET /api/v1/vehicles/{id}`, `PUT /api/v1/vehicles/{id}`, and `DELETE /api/v1/vehicles/{id}` routes, applying Admin-only write guards and Customer/Admin read authorization (TDD GREEN). Updated `README.md` and stopped.
+
+
 

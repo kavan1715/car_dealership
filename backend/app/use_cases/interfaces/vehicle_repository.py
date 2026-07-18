@@ -16,8 +16,13 @@ class IVehicleRepository(ABC):
         pass
 
     @abstractmethod
-    def get_all(self) -> List[Vehicle]:
-        """Retrieve all vehicles in the inventory."""
+    def get_all(self, offset: int = 0, limit: int = 10) -> List[Vehicle]:
+        """Retrieve a paginated slice of vehicles in the inventory."""
+        pass
+
+    @abstractmethod
+    def count(self) -> int:
+        """Get the total count of vehicle records in the database."""
         pass
 
     @abstractmethod

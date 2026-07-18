@@ -19,8 +19,11 @@ class SqlVehicleRepository(IVehicleRepository):
     def get_by_id(self, vehicle_id: int) -> Optional[Vehicle]:
         return self.db.query(Vehicle).filter(Vehicle.id == vehicle_id).first()
 
-    def get_all(self) -> List[Vehicle]:
-        return self.db.query(Vehicle).all()
+    def get_all(self, offset: int = 0, limit: int = 10) -> List[Vehicle]:
+        return self.db.query(Vehicle).offset(offset).limit(limit).all()
+
+    def count(self) -> int:
+        return self.db.query(Vehicle).count()
 
     def update(self, vehicle: Vehicle) -> Vehicle:
         self.db.commit()

@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from decimal import Decimal
 from app.use_cases.interfaces.vehicle_repository import IVehicleRepository
 from app.infrastructure.persistence.models.vehicle import Vehicle
@@ -22,8 +22,8 @@ class VehicleService:
             raise ValueError("Model cannot be empty.")
         if not category or not category.strip():
             raise ValueError("Category cannot be empty.")
-        if price < 0:
-            raise ValueError("Price must be non-negative.")
+        if price <= 0:
+            raise ValueError("Price must be greater than zero.")
         if quantity < 0:
             raise ValueError("Quantity must be non-negative.")
 
@@ -42,8 +42,16 @@ class VehicleService:
             raise VehicleNotFoundException(f"Vehicle with ID {vehicle_id} not found.")
         return vehicle
 
-    def get_all_vehicles(self) -> List[Vehicle]:
-        return self.vehicle_repo.get_all()
+    def get_all_vehicles(self, page: int = 1, limit: int = 10) -> Tuple[List[Vehicle], int]:
+        if page < 1:
+            page = 1
+        if limit < 1:
+            limit = 10
+            
+        offset = (page - 1) * limit
+        vehicles = self.vehicle_repo.get_all(offset=offset, limit=limit)
+        total_count = self.vehicle_repo.count()
+        return vehicles, total_count
 
     def update_vehicle_details(
         self, 
@@ -51,7 +59,8 @@ class VehicleService:
         make: Optional[str] = None, 
         model: Optional[str] = None, 
         category: Optional[str] = None, 
-        price: Optional[Decimal] = None
+        price: Optional[Decimal] = None,
+        quantity: Optional[int] = None
     ) -> Vehicle:
         vehicle = self.get_vehicle_by_id(vehicle_id)
 
@@ -71,9 +80,14 @@ class VehicleService:
             vehicle.category = category.strip()
             
         if price is not None:
-            if price < 0:
-                raise ValueError("Price must be non-negative.")
+            if price <= 0:
+                raise ValueError("Price must be greater than zero.")
             vehicle.price = price
+
+        if quantity is not None:
+            if quantity < 0:
+                raise ValueError("Quantity must be non-negative.")
+            vehicle.quantity = quantity
 
         return self.vehicle_repo.update(vehicle)
 

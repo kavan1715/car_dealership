@@ -133,7 +133,7 @@ def test_vehicle_service_validation_rules(db_session):
         vehicle_service.create_vehicle(make="Honda", model="", category="Sedan", price=Decimal("20000"))
         
     # Validate price cannot be negative
-    with pytest.raises(ValueError, match="Price must be non-negative"):
+    with pytest.raises(ValueError, match="Price must be greater than zero"):
         vehicle_service.create_vehicle(make="Honda", model="Civic", category="Sedan", price=Decimal("-100"))
 
 def test_vehicle_service_purchase_and_restock_rules(db_session):
