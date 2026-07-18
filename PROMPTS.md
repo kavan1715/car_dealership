@@ -187,3 +187,83 @@
 *   **AI Response Summary**:
     Explained the mechanics of SQLAlchemy ORM mapping. Wrote database metadata and schema unit tests (TDD RED). Created `User` (with `UserRole` enum) and `Vehicle` models in modern SQLAlchemy 2.0 style (Mapped, mapped_column), registering them in the `models` module package. Ran pytest to verify all tests passed (TDD GREEN). Configured Alembic `env.py` schema loading and generated the dialect-agnostic migration file. Updated `README.md` with documentation and an ER diagram. Logged prompts and exited waiting for Phase 4.
 
+---
+
+### Prompt #5
+*   **Date**: 2026-07-18
+*   **Prompt Title**: Phase 4 - Repository Pattern & Service Layer
+*   **Complete Prompt**:
+    ```text
+    Let's begin Phase 4.
+
+    You are acting as a Senior Full Stack Software Engineer and Technical Lead mentoring me through this placement assessment.
+
+    Continue from the existing project without recreating or modifying completed work unless necessary.
+
+    ==========================================================
+    PHASE 4 – REPOSITORY PATTERN & SERVICE LAYER
+    ==========================================================
+
+    Objective
+
+    Build the Repository Layer and Service Layer following Clean Architecture, SOLID principles, and Test-Driven Development (TDD).
+
+    This phase should prepare the project for Authentication and CRUD APIs.
+
+    Do NOT implement FastAPI routes or authentication yet.
+
+    ==========================================================
+    TASKS
+    ==========================================================
+
+    Explain:
+    1. What is the Repository Pattern?
+    2. Why enterprise applications use the Repository Pattern.
+    3. What is the Service Layer?
+    4. Why business logic should never exist inside API routes.
+    5. How Repository and Service Layers improve maintainability and testing.
+
+    ==========================================================
+    REPOSITORY LAYER
+    ==========================================================
+    Create repositories for UserRepository, VehicleRepository.
+    UserRepository: Create User, Get User by ID, Get User by Email, Get All Users, Delete User.
+    VehicleRepository: Create Vehicle, Get Vehicle by ID, Get All Vehicles, Update Vehicle, Delete Vehicle, Search Vehicles, Purchase Vehicle, Restock Vehicle.
+    Repositories should only communicate with the database. No business logic.
+
+    ==========================================================
+    SERVICE LAYER
+    ==========================================================
+    Create UserService, VehicleService.
+    UserService: Validate User Creation, Check Duplicate Email, Call Repository.
+    VehicleService: Validate Vehicle Data, Validate Purchase Quantity, Validate Restock Quantity, Call Repository, Raise meaningful exceptions.
+    Business logic must exist only inside Services.
+
+    ==========================================================
+    EXCEPTION HANDLING
+    ==========================================================
+    Create custom exceptions: UserAlreadyExistsException, UserNotFoundException, VehicleNotFoundException, OutOfStockException, InvalidQuantityException. Create a reusable exception module.
+
+    ==========================================================
+    DEPENDENCY INJECTION
+    ==========================================================
+    Configure Dependency Injection for Repositories, Services, Database Session. Explain how FastAPI Dependency Injection will be used later.
+
+    ==========================================================
+    TDD REQUIREMENT
+    ==========================================================
+    STRICTLY follow RED -> GREEN -> REFACTOR.
+    Before implementing repositories and services, write tests first.
+    Repository Tests: Create User, Find User, Create Vehicle, Update Vehicle, Delete Vehicle, Search Vehicle.
+    Service Tests: Duplicate Email, Purchase Vehicle, Out Of Stock, Invalid Restock, Vehicle Validation.
+    Only after writing tests, implement the repositories and services. Explain each TDD step.
+
+    ==========================================================
+    CODE QUALITY / DO NOT IMPLEMENT / README / PROMPTS / REPORT
+    ==========================================================
+    [Standard Clean Code parameters, no API routes/JWT, append-only files, list classes and files, wait for confirmation]
+    ```
+*   **AI Response Summary**:
+    Explained the concepts of the Repository Pattern, Service Layer, and separating business logic from routes. Wrote custom domain exceptions (`UserAlreadyExistsException`, `UserNotFoundException`, `VehicleNotFoundException`, `OutOfStockException`, `InvalidQuantityException`). Defined abstract repository interfaces (ports) `IUserRepository` and `IVehicleRepository`. Developed comprehensive unit tests for all repository and service methods (TDD RED). Implemented `SqlUserRepository` and `SqlVehicleRepository` SQLAlchemy database adapters and created `UserService` and `VehicleService` containing validation and transaction rules (TDD GREEN). Configured FastAPI-compatible dependency injection modules. Updated README.md and stopped for review.
+
+

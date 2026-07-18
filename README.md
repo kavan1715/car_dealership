@@ -268,6 +268,50 @@ cd backend
 
 ---
 
+## Domain Design Patterns & Architecture Layers
+
+To comply with SOLID principles and Clean Architecture, Phase 4 establishes key design layers.
+
+### 1. Repository Pattern (Data Access Layer)
+The Repository Pattern decouples our core application logic from the details of the database access technology (SQLAlchemy ORM).
+- **Interfaces (Ports)**: Declared as abstract classes (`IUserRepository`, `IVehicleRepository`) in the Application layer (`app/use_cases/interfaces/`).
+- **Implementations (Adapters)**: Implemented as concrete classes (`SqlUserRepository`, `SqlVehicleRepository`) in the Infrastructure layer (`app/infrastructure/persistence/repositories/`).
+
+This separation allows the business logic to remain completely agnostic of the database engine and ORM structure, making it possible to swap SQL database adapters with mock or alternate database systems without rewriting application workflows.
+
+### 2. Service Layer (Business Logic Layer)
+The Service Layer coordinates transactions, executes core calculations, and runs domain validations.
+- **UserService**: Performs validation logic, handles user registration constraints, and coordinates user CRUD adapters.
+- **VehicleService**: Validates incoming car specifications, handles inventory stock adjustments (purchasing and restocking logic), and triggers exceptions.
+
+*Why avoid logic in API Routes?* API Route handlers (Controllers) should only be responsible for parsing HTTP requests, serializing models to JSON DTOs, and mapping response codes. Keeping business logic out of routers simplifies controllers, makes use cases reusable across other delivery mechanisms (like CLI runners or task workers), and enables clean unit testing of application rules without spawning HTTP server instances.
+
+### 3. Exception Handling (Domain Exceptions)
+We established a dedicated exception layer (`app/domain/exceptions/`) containing custom domain exceptions:
+- `UserAlreadyExistsException`: Triggered on user email duplication checks.
+- `UserNotFoundException`: Triggered when queried users do not exist.
+- `VehicleNotFoundException`: Triggered when queried vehicles do not exist.
+- `OutOfStockException`: Triggered when vehicle purchases exceed stock inventory.
+- `InvalidQuantityException`: Triggered when purchasing or restocking with negative/zero inputs.
+
+### 4. Dependency Injection (FastAPI Integration)
+We configure a modular dependency injection file `app/infrastructure/web/dependencies.py`. It uses FastAPI's `Depends` mechanisms to inject dependencies down the layers:
+```
+      FastAPI Router Endpoint
+                 │
+                 ▼
+       get_vehicle_service() [Depends]
+                 │
+                 ▼
+     get_vehicle_repository() [Depends]
+                 │
+                 ▼
+            get_db() [Depends]
+```
+This hierarchical injection facilitates modular mocking during integration and API testing by overriding dependencies at the router level.
+
+---
+
 ## Deployment Guide
 *(To be completed in future deployment phases)*
 
