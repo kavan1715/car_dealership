@@ -3,6 +3,8 @@ from app.use_cases.interfaces.user_repository import IUserRepository
 from app.infrastructure.persistence.models.user import User, UserRole
 from app.domain.exceptions import UserAlreadyExistsException, UserNotFoundException
 
+from app.infrastructure.security.hashing import hash_password
+
 class UserService:
     """Service layer coordinating business logic for User operations."""
 
@@ -21,11 +23,10 @@ class UserService:
         # Check duplicate email
         existing_user = self.user_repo.get_by_email(email.strip())
         if existing_user:
-            raise UserAlreadyExistsException(f"User with email '{email}' already exists.")
+            raise UserAlreadyExistsException("User with this email already exists.")
 
-        # In this phase we populate hashed_password directly as a placeholder
-        # Actual encryption logic will be added during the Auth phase.
-        hashed_password = f"hashed_{password}"
+        # Hash password using bcrypt
+        hashed_password = hash_password(password)
 
         user = User(
             name=name.strip(),

@@ -2,12 +2,16 @@ from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from app.infrastructure.persistence.db import get_db
+from app.infrastructure.web.api_v1.router import api_router
 
 app = FastAPI(
     title="Car Dealership API",
     description="Enterprise-grade Clean Architecture Backend API for Car Dealership",
     version="1.0.0"
 )
+
+# Include the API router
+app.include_router(api_router, prefix="/api/v1")
 
 @app.get("/")
 def read_root():

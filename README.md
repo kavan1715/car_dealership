@@ -312,6 +312,83 @@ This hierarchical injection facilitates modular mocking during integration and A
 
 ---
 
+## Secure Authentication & Role-Based Authorization
+
+We implement a robust, production-ready JWT authentication system utilizing `bcrypt` password hashing, token validation, and role-based permissions checks.
+
+### 1. Password Hashing Utility
+Passwords are cryptographically hashed using **Bcrypt** before they are committed to the database. We avoid storing raw passwords to protect users in the event of data breaches. Bcrypt adds a random salt value and runs key stretching to make brute-force cracking mathematically infeasible. 
+
+### 2. JWT Access Token Flow
+The JWT (JSON Web Token) authentication mechanism follows this sequence:
+```
+  Client (Frontend)            FastAPI (Backend)
+         │                             │
+         │────── POST /login ─────────>│  [Verify password with bcrypt]
+         │<───── Return Token ─────────│  [Generate JWT: id, email, role]
+         │                             │
+    [Store Token]                      │
+         │                             │
+         │─── Request with Header ────>│  [Inject HTTPBearer dependency]
+         │    (Authorization: Bearer)  │  [Verify signature & exp time]
+         │                             │  [Load User to verify Role]
+         │<────── Return Data ─────────│  [Return requested resource]
+         ▼                             ▼
+```
+
+### 3. Role-Based Authorization
+The platform defines two user roles (`Customer`, `Admin`) representing distinct access tiers:
+*   **Customer Tier**: Authenticated users can query listings and schedule test drives.
+*   **Admin Tier**: Administrator privilege checks (`Depends(get_current_admin)`) block Customers with a `403 Forbidden` response and allow read/write management actions.
+
+### 4. API Endpoints Reference
+*   `POST /api/v1/auth/register` — Creates a new user record. Normalizes email addresses to lowercase and trims name fields. Requires strong password limits (minimum 8 characters).
+*   `POST /api/v1/auth/login` — Verifies user credentials and returns a bearer JWT access token.
+
+### 5. Authentication Examples
+
+#### Registration Request Example
+```bash
+curl -X POST "http://localhost:8000/api/v1/auth/register" \
+     -H "Content-Type: application/json" \
+     -d '{"name": "Alice Smith", "email": "alice@example.com", "password": "securepassword123", "confirm_password": "securepassword123"}'
+```
+
+#### Registration Response (201 Created)
+```json
+{
+  "id": 1,
+  "name": "Alice Smith",
+  "email": "alice@example.com",
+  "role": "Customer",
+  "created_at": "2026-07-18T17:50:00Z"
+}
+```
+
+#### Login Request Example
+```bash
+curl -X POST "http://localhost:8000/api/v1/auth/login" \
+     -H "Content-Type: application/json" \
+     -d '{"email": "alice@example.com", "password": "securepassword123"}'
+```
+
+#### Login Response (200 OK)
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token_type": "bearer",
+  "user": {
+    "id": 1,
+    "name": "Alice Smith",
+    "email": "alice@example.com",
+    "role": "Customer",
+    "created_at": "2026-07-18T17:50:00Z"
+  }
+}
+```
+
+---
+
 ## Deployment Guide
 *(To be completed in future deployment phases)*
 
