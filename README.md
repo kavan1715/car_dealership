@@ -501,6 +501,39 @@ curl -X POST "http://localhost:8000/api/v1/vehicles/1/restock" \
 
 ---
 
+## Frontend SPA Architecture
+
+We implement a premium, responsive React Single Page Application (SPA) powered by Vite, Tailwind CSS, and Lucide React Icons.
+
+### 1. Folder Structure
+The frontend application uses an enterprise-grade modular React folder structure:
+*   `src/components/` — Reusable presentation components (buttons, input fields, modals, spinners, cards).
+*   `src/layouts/` — Common structural grids (main wrappers, drawer alignments).
+*   `src/pages/` — Distinct page components (Landing, Login, Register, Customer Dashboard, Vehicle Details, 404).
+*   `src/routes/` — React Router bindings and protected route guards.
+*   `src/context/` — State stores (persistent JWT authentication values).
+*   `src/hooks/` — Custom React hooks (`useAuth`).
+*   `src/services/` — Network client modules (Axios client with automated JWT request headers injection and 401 interceptors).
+*   `src/styles/` — Global styling (Tailwind CSS bases, custom premium glassmorphism classes, glowing panels).
+
+### 2. Authentication Flow
+The JWT authorization routine follows this workflow:
+1.  **Submission**: Client submits username and credentials at `/login`.
+2.  **Storage**: Upon successful login, the server returns the JWT token. The application stores the token in `localStorage` and loads details in `AuthContext`.
+3.  **Automatic Header Injection**: Axios request interceptors automatically read the token and append `Authorization: Bearer <token>` to all subsequent requests.
+4.  **Auto-logout**: Axios response interceptors catch `401 Unauthorized` errors and automatically clear local storage, redirecting expired sessions to `/login`.
+
+### 3. Reusable UI Components
+*   `VehicleCard` — Renders Make, Model, Category, Price, and available Quantity. Employs disable-gates preventing purchases if stock counts drop to 0.
+*   `Pagination` — Handles prev/next page requests and displays current/total indicators.
+*   `Button` — Standardized button with loading state spinners.
+*   `Input` — Standardized input field featuring error support linked to React Hook Form.
+
+### 4. Interface Showcase (Placeholders)
+*(Screenshots showing Dashboard grids, Search sidebars, and responsive menus will be added post-deployment)*
+
+---
+
 ## Deployment Guide
 *(To be completed in future deployment phases)*
 

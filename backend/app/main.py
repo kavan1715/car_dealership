@@ -1,8 +1,14 @@
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import text
-from app.infrastructure.persistence.db import get_db
+from app.infrastructure.persistence.db import get_db, Base, engine
 from app.infrastructure.web.api_v1.router import api_router
+# Import models to ensure registry on Base before creation
+from app.infrastructure.persistence.models.user import User
+from app.infrastructure.persistence.models.vehicle import Vehicle
+
+# Create all database tables automatically on startup
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Car Dealership API",

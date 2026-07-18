@@ -416,6 +416,52 @@
 *   **AI Response Summary**:
     Explained inventory management, business logic segregation in service layers, and transaction safety. Updated `SqlVehicleRepository` mutating methods to use `try-except` rollback blocks. Added `UnauthorizedInventoryAccessException` domain exception. Created `VehicleRestockRequest` schemas. Wrote comprehensive repository, service, and API tests (TDD RED). Implemented `POST /api/v1/vehicles/{id}/purchase` and `POST /api/v1/vehicles/{id}/restock` endpoints applying customer/admin authorization checks (TDD GREEN). Updated `README.md` and stopped.
 
+---
+
+### Prompt #9
+*   **Date**: 2026-07-18
+*   **Prompt Title**: Phase 9 - Frontend (Authentication & Customer Dashboard)
+*   **Complete Prompt**:
+    ```text
+    Let's begin Phase 9.
+
+    You are acting as a Senior Full Stack Software Engineer and Technical Lead mentoring me through this placement assessment.
+
+    Continue from the existing project without recreating or modifying completed work unless absolutely necessary.
+
+    ==========================================================
+    PHASE 9 – FRONTEND (AUTHENTICATION & CUSTOMER DASHBOARD)
+    ==========================================================
+
+    Objective
+    Build a modern, responsive React Single Page Application (SPA) that consumes the backend APIs built in previous phases.
+    Only customer-facing pages. Do NOT implement the Admin Dashboard yet.
+
+    ==========================================================
+    TECH STACK & STRUCTURE
+    ==========================================================
+    React (Vite), Tailwind CSS, React Router DOM, Axios, Context API, React Hook Form, Zod Validation, React Hot Toast, Lucide Icons.
+    Structure: components, layouts, pages, routes, context, hooks, services, styles, assets.
+
+    ==========================================================
+    PAGES & ACTIONS
+    - Landing Page (Responsive Navbar, Hero, Choice, CTA, Footer).
+    - Register Page (Zod validations, Toast, POST /api/auth/register).
+    - Login Page (JWT local storage, Redirect, POST /api/auth/login).
+    - Customer Dashboard (GET /api/vehicles, search/sort/filter, pagination, purchase trigger).
+    - Details Page (Full specs, Purchase CTA).
+    - 404 Page.
+
+    ==========================================================
+    TDD: Component tests for Login, Register, Protected Route, Vehicle Card, Search, Pagination, Purchase Button before implementation.
+    ==========================================================
+    Return friendly loading/empty/error states. Follow SOLID and Clean architecture.
+    Append to README.md and PROMPTS.md. Provide Phase Report. Stop for confirmation.
+    ```
+*   **AI Response Summary**:
+    Explained SPA architecture, component structure, Context API, Axios, authentication flow, and route protection. Structured frontend using React Clean enterprise conventions. Configured Tailwind CSS, postcss, and Outfit/Inter fonts. Created reusable `VehicleCard`, `Pagination`, `Spinner`, `Navbar`, `Footer`, `Input`, and `Button` components. Developed unit tests for components verifying rendering and callbacks using Vitest and React Testing Library (TDD RED). Created context files, protected routing guards, and Axios interceptor services. Built LandingPage, LoginPage, RegisterPage, paginated CustomerDashboard showcase, specifications details view, and 404 page (TDD GREEN). Updated `README.md` and stopped.
+
+
 
 
 
