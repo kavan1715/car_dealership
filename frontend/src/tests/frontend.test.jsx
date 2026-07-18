@@ -29,7 +29,7 @@ describe('Frontend Component Tests', () => {
     expect(screen.getByText('Tesla')).toBeInTheDocument();
     expect(screen.getByText('Model S')).toBeInTheDocument();
     expect(screen.getByText('Sedan')).toBeInTheDocument();
-    expect(screen.getByText('$90,000.00')).toBeInTheDocument();
+    expect(screen.getByText('₹90,000.00')).toBeInTheDocument();
     expect(screen.getByText('5 left')).toBeInTheDocument();
     
     const button = screen.getByRole('button', { name: /purchase/i });

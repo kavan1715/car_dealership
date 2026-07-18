@@ -23,7 +23,7 @@ export const Navbar = () => {
         <Link to="/" className="flex items-center gap-2 text-white hover:opacity-90">
           <Car className="w-8 h-8 text-primary-500" />
           <span className="text-xl font-black font-display tracking-wider">
-            ANTIGRAVITY<span className="text-primary-500">MOTORS</span>
+            GARAGE<span className="text-primary-500">ONE</span>
           </span>
         </Link>
 
@@ -35,6 +35,11 @@ export const Navbar = () => {
           <Link to="/dashboard" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
             Inventory
           </Link>
+          {user && user.role?.toLowerCase() === 'admin' && (
+            <Link to="/admin" className="text-sm font-medium text-primary-400 hover:text-primary-300 transition-colors">
+              Admin Panel
+            </Link>
+          )}
 
           {user ? (
             <div className="flex items-center gap-6 border-l border-slate-800 pl-6">
@@ -95,6 +100,15 @@ export const Navbar = () => {
           >
             Inventory
           </Link>
+          {user && user.role?.toLowerCase() === 'admin' && (
+            <Link 
+              to="/admin" 
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-sm font-medium text-primary-400 hover:text-primary-300"
+            >
+              Admin Panel
+            </Link>
+          )}
           
           {user ? (
             <div className="flex flex-col gap-4 border-t border-slate-800/80 pt-4">

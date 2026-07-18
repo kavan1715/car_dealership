@@ -461,6 +461,58 @@
 *   **AI Response Summary**:
     Explained SPA architecture, component structure, Context API, Axios, authentication flow, and route protection. Structured frontend using React Clean enterprise conventions. Configured Tailwind CSS, postcss, and Outfit/Inter fonts. Created reusable `VehicleCard`, `Pagination`, `Spinner`, `Navbar`, `Footer`, `Input`, and `Button` components. Developed unit tests for components verifying rendering and callbacks using Vitest and React Testing Library (TDD RED). Created context files, protected routing guards, and Axios interceptor services. Built LandingPage, LoginPage, RegisterPage, paginated CustomerDashboard showcase, specifications details view, and 404 page (TDD GREEN). Updated `README.md` and stopped.
 
+---
+
+### Prompt #10
+*   **Date**: 2026-07-18
+*   **Prompt Title**: Phase 10 - Admin Dashboard & Vehicle Management
+*   **Complete Prompt**:
+    ```text
+    Let's begin Phase 10.
+
+    You are acting as a Senior Staff Software Engineer with 15+ years of experience mentoring me for a placement assessment.
+
+    Continue from the existing project without recreating or modifying completed work unless absolutely necessary.
+
+    ==========================================================
+    PHASE 10 – ADMIN DASHBOARD & VEHICLE MANAGEMENT
+    ==========================================================
+
+    Objective
+    Build a production-ready Admin Dashboard using React that consumes the backend APIs already implemented.
+    Follow: Clean Architecture, SOLID, Component-based design, TDD.
+    Only Admin functionality. Do NOT modify backend APIs unless absolutely necessary.
+
+    ==========================================================
+    EXPLAIN FIRST
+    ==========================================================
+    1. Admin Dashboard Architecture
+    2. Why RBAC (Role-Based Access Control) is important.
+    3. How protected frontend routes work.
+    4. Explain request flow: Admin -> Protected Route -> Context API -> Axios Service -> Backend API -> Repository -> Database.
+
+    ==========================================================
+    ADMIN ROUTES & ACCESS CONTROL
+    - /admin, /admin/vehicles, /admin/add-vehicle, /admin/edit-vehicle/:id.
+    - If customer role tries, redirect to 403 Forbidden screen.
+
+    ==========================================================
+    DASHBOARD METRICS & ACTIONS
+    - Cards: Total Vehicles, Total Quantity, Out of Stock Vehicles, Total Categories.
+    - Data Table: ID, Make, Model, Category, Price, Quantity, Actions (Edit, Delete, Restock).
+    - Add/Edit forms (Price > 0, Quantity >= 0).
+    - Restock Modal (Positive quantities only).
+    - Confirmation Deletion Modal.
+
+    ==========================================================
+    TDD: Write tests for Dashboard, Vehicle Table, Add Vehicle Form, Edit Vehicle Form, Delete Modal, Protected Route before implementation.
+    ==========================================================
+    Append to README.md and PROMPTS.md. Provide Phase Report. Stop for confirmation.
+    ```
+*   **AI Response Summary**:
+    Explained admin dashboard architecture, RBAC relevance, client route protection, and request flows from UI to database. Wrote comprehensive component tests verifying StatsCard rendering, ConfirmModal dismissals, and confirm callback triggers (TDD RED). Created reusable `StatsCard` and `ConfirmModal` UI components. Extended the `ProtectedRoute` guard to check role assertions and block customers (redirects to `/403` page). Implemented layout wrappers `AdminSidebar` and `AdminNavbar`. Developed `AdminDashboard` page computing stats dynamically via in-memory aggregates. Developed `AdminVehiclePage` with interactive sorting/filtering tables and restocking overlay modals. Created `AddVehiclePage` and `EditVehiclePage` forms verifying quantity and price validations. Linked routes and validated that all **6 frontend tests and 69 backend tests are fully green and passing** (TDD GREEN). Updated `README.md` and stopped.
+
+
 
 
 

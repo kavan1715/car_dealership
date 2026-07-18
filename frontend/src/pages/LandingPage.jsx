@@ -95,7 +95,7 @@ export const LandingPage = () => {
       <section className="py-24 px-6 border-t border-slate-900 bg-[#080b13]/60 w-full">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-2xl sm:text-4xl font-extrabold font-display text-center text-white mb-16 uppercase tracking-wide">
-            The Antigravity <span className="text-primary-500">Standard</span>
+            The GarageOne <span className="text-primary-500">Standard</span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

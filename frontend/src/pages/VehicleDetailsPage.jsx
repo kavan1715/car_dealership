@@ -53,9 +53,9 @@ export const VehicleDetailsPage = () => {
   }
 
   const formatPrice = (value) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'INR',
     }).format(parseFloat(value));
   };
 
@@ -81,7 +81,7 @@ export const VehicleDetailsPage = () => {
           {/* Left: Car Large Backdrop */}
           <div className="relative rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 shadow-2xl h-96 lg:h-[450px]">
             <img
-              src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=1200"
+              src={localStorage.getItem(`vehicle_image_${id}`) || "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=1200"}
               alt={`${vehicle.make} ${vehicle.model}`}
               className="w-full h-full object-cover opacity-85"
             />

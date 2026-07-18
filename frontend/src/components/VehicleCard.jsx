@@ -8,15 +8,20 @@ export const VehicleCard = ({ vehicle, onPurchase }) => {
   // Formatter for currency
   const formatPrice = (value) => {
     const num = parseFloat(value);
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'INR',
       minimumFractionDigits: 2,
     }).format(num);
   };
 
   // Curated premium images mapping based on category/make/model to look premium
   const getCarPlaceholderImage = () => {
+    // Check if there is an uploaded image in localStorage
+    const uploadedImage = localStorage.getItem(`vehicle_image_${id}`);
+    if (uploadedImage) {
+      return uploadedImage;
+    }
     // Generates a stylized backdrop image using Unsplash (reusable asset placeholders)
     if (category.toLowerCase() === 'suv') {
       return 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=600';

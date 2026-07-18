@@ -534,6 +534,26 @@ The JWT authorization routine follows this workflow:
 
 ---
 
+## Admin Dashboard & Vehicle Management
+
+We implement a premium SaaS-style Administrative Console to manage vehicle inventories, restocking acquisitions, and real-time statistics.
+
+### 1. Features
+*   **Overview Stats Cards**: Displays Total Vehicles, Total Inventory counts, Out of Stock totals, and unique Category segments computed in-memory from backend search listings.
+*   **Admin Access Protection**: Employs `<ProtectedRoute requiredRole="admin">` guards that check roles and immediately redirect unauthorized Customer role attempts to `/403` Denied.
+*   **Professional Data Table**: Shows details (Make, Model, Category, Price, Stock) and provides actions for Editing, Deleting, and Restocking.
+*   **Restocking overlays**: Modals validate input quantities, enforcing positive values.
+*   **Confirmation Deletes**: Visual modals prevent accidental catalog removals.
+
+### 2. Admin Router Mappings
+*   `/admin` — Dashboard overview statistics.
+*   `/admin/vehicles` — Data tables for searching, sorting, paginating, and deleting items.
+*   `/admin/add-vehicle` — Forms with validations (Price > 0, Quantity >= 0) to register new catalog entries.
+*   `/admin/edit-vehicle/:id` — Prefills vehicle spec details and pushes updates via `PUT` API calls.
+*   `/403` — Custom Forbidden layout.
+
+---
+
 ## Deployment Guide
 *(To be completed in future deployment phases)*
 

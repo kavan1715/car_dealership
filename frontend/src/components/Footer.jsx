@@ -11,7 +11,7 @@ export const Footer = () => {
           <div className="flex items-center gap-2 mb-4">
             <Car className="w-6 h-6 text-primary-500" />
             <span className="text-lg font-black font-display tracking-wider">
-              ANTIGRAVITY<span className="text-primary-500">MOTORS</span>
+              GARAGE<span className="text-primary-500">ONE</span>
             </span>
           </div>
           <p className="text-slate-400 text-sm max-w-sm leading-relaxed">
@@ -45,7 +45,7 @@ export const Footer = () => {
             </a>
           </div>
           <p className="text-xs text-slate-500">
-            &copy; 2026 Antigravity Motors. All rights reserved.
+            &copy; 2026 GarageOne. All rights reserved.
           </p>
         </div>
       </div>

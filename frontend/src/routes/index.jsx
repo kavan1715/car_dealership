@@ -9,6 +9,13 @@ import { CustomerDashboard } from '../pages/CustomerDashboard';
 import { VehicleDetailsPage } from '../pages/VehicleDetailsPage';
 import { NotFoundPage } from '../pages/NotFoundPage';
 
+// Import Admin Pages
+import { AdminDashboard } from '../pages/AdminDashboard';
+import { AdminVehiclePage } from '../pages/AdminVehiclePage';
+import { AddVehiclePage } from '../pages/AddVehiclePage';
+import { EditVehiclePage } from '../pages/EditVehiclePage';
+import { ForbiddenPage } from '../pages/ForbiddenPage';
+
 // Import Route Guards
 import { ProtectedRoute } from '../components/ProtectedRoute';
 
@@ -18,8 +25,9 @@ export const AppRoutes = () => {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/403" element={<ForbiddenPage />} />
       
-      {/* Protected Routes */}
+      {/* Customer Protected Routes */}
       <Route
         path="/dashboard"
         element={
@@ -33,6 +41,40 @@ export const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <VehicleDetailsPage />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Admin Protected Routes */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute requiredRole="admin">
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/vehicles"
+        element={
+          <ProtectedRoute requiredRole="admin">
+            <AdminVehiclePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/add-vehicle"
+        element={
+          <ProtectedRoute requiredRole="admin">
+            <AddVehiclePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/edit-vehicle/:id"
+        element={
+          <ProtectedRoute requiredRole="admin">
+            <EditVehiclePage />
           </ProtectedRoute>
         }
       />

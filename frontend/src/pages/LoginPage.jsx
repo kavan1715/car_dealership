@@ -30,9 +30,13 @@ export const LoginPage = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      await login(data.email, data.password);
+      const user = await login(data.email, data.password);
       toast.success('Logged in successfully!');
-      navigate('/dashboard');
+      if (user.role === 'Admin') {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (error) {
       toast.error(error.message || 'Login failed. Please check credentials.');
     } finally {
@@ -48,7 +52,7 @@ export const LoginPage = () => {
         <Link to="/" className="flex items-center justify-center gap-2 mb-6">
           <Car className="w-10 h-10 text-primary-500" />
           <span className="text-2xl font-black font-display tracking-wider text-white">
-            ANTIGRAVITY<span className="text-primary-500">MOTORS</span>
+            GARAGE<span className="text-primary-500">ONE</span>
           </span>
         </Link>
         <h2 className="text-center text-3xl font-black tracking-tight text-white uppercase font-display">

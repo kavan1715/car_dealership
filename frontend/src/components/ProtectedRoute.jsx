@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { Spinner } from './Spinner';
 
-export const ProtectedRoute = ({ children }) => {
+export const ProtectedRoute = ({ children, requiredRole }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -16,6 +16,10 @@ export const ProtectedRoute = ({ children }) => {
 
   if (!user) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (requiredRole && user.role?.toLowerCase() !== requiredRole.toLowerCase()) {
+    return <Navigate to="/403" replace />;
   }
 
   return children;

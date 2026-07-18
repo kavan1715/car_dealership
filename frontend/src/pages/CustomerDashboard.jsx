@@ -185,7 +185,7 @@ export const CustomerDashboard = () => {
 
             {/* Price Boundaries */}
             <div className="flex flex-col gap-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Price Range ($)</label>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Price Range (INR)</label>
               <div className="grid grid-cols-2 gap-2">
                 <input
                   type="number"
