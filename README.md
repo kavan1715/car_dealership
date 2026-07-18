@@ -389,6 +389,60 @@ curl -X POST "http://localhost:8000/api/v1/auth/login" \
 
 ---
 
+## Vehicle Search, Filtering & Pagination
+
+We implement an advanced search and query system supporting dynamic SQLAlchemy query building, sort parameters, and pagination metadata.
+
+### 1. Separation of Concerns
+*   **Search vs. CRUD**: CRUD handles individual resources. Search queries are dynamic and multi-layered. Separating them keeps controllers clean and complies with the Single Responsibility Principle.
+*   **Searching vs. Filtering**: Searching is text-based partial matching (e.g. matching "must" to "Mustang"). Filtering restricts records by matching constraints (e.g. category matching "SUV", or pricing boundaries).
+*   **Pagination & Sorting**: Pagination prevents database bottlenecks by splitting large tables into slices (`limit` and `offset`). Sorting organizes results based on user preferences.
+
+### 2. Search API Parameters
+*   `make` — Partial case-insensitive string match.
+*   `model` — Partial case-insensitive string match.
+*   `category` — Exact string match.
+*   `minimum_price` — Greater than or equal to price decimal constraint.
+*   `maximum_price` — Less than or equal to price decimal constraint.
+*   `minimum_quantity` — Minimum in-stock threshold.
+*   `availability` — Boolean parameter. `true` returns items with quantity > 0.
+*   `sort_by` — Sort column (`price`, `created_at`, `make`).
+*   `order` — Sorting direction (`asc`, `desc`).
+*   `page` — Target page (default 1).
+*   `limit` — Page size limit (default 10).
+
+### 3. API Examples
+
+#### Search Request Example
+```bash
+curl -X GET "http://localhost:8000/api/v1/vehicles/search?make=BMW&category=SUV&availability=true&sort_by=price&order=desc" \
+     -H "Authorization: Bearer <USER_JWT_TOKEN>"
+```
+
+#### Search Response (200 OK)
+```json
+{
+  "total_records": 1,
+  "total_pages": 1,
+  "current_page": 1,
+  "page_size": 10,
+  "results": [
+    {
+      "id": 1,
+      "make": "BMW",
+      "model": "X5",
+      "category": "SUV",
+      "price": "60000.00",
+      "quantity": 2,
+      "created_at": "2026-07-18T18:00:00Z",
+      "updated_at": "2026-07-18T18:00:00Z"
+    }
+  ]
+}
+```
+
+---
+
 ## Deployment Guide
 *(To be completed in future deployment phases)*
 

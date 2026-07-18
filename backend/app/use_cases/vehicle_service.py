@@ -53,6 +53,56 @@ class VehicleService:
         total_count = self.vehicle_repo.count()
         return vehicles, total_count
 
+    def search_and_filter_vehicles(
+        self,
+        make: Optional[str] = None,
+        model: Optional[str] = None,
+        category: Optional[str] = None,
+        min_price: Optional[Decimal] = None,
+        max_price: Optional[Decimal] = None,
+        min_quantity: Optional[int] = None,
+        availability: Optional[bool] = None,
+        sort_by: Optional[str] = None,
+        order: str = "asc",
+        page: int = 1,
+        limit: int = 10
+    ) -> Tuple[List[Vehicle], int]:
+        # Validate price bounds
+        if min_price is not None and max_price is not None:
+            if min_price > max_price:
+                raise ValueError("Minimum price cannot be greater than maximum price.")
+
+        # Validate pagination constraints
+        if page <= 0:
+            raise ValueError("Page must be greater than zero.")
+        if limit <= 0:
+            raise ValueError("Limit must be greater than zero.")
+
+        # Validate sorting fields
+        allowed_sort_columns = [None, "price", "created_at", "make"]
+        if sort_by not in allowed_sort_columns:
+            raise ValueError("Invalid sort column.")
+
+        allowed_orders = ["asc", "desc"]
+        if order not in allowed_orders:
+            raise ValueError("Invalid sort order.")
+
+        offset = (page - 1) * limit
+        results, total_records = self.vehicle_repo.search_and_filter(
+            make=make,
+            model=model,
+            category=category,
+            min_price=min_price,
+            max_price=max_price,
+            min_quantity=min_quantity,
+            availability=availability,
+            sort_by=sort_by,
+            order=order,
+            offset=offset,
+            limit=limit
+        )
+        return results, total_records
+
     def update_vehicle_details(
         self, 
         vehicle_id: int, 

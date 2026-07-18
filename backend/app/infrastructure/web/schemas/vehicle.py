@@ -51,3 +51,10 @@ class PaginationMetadata(BaseModel):
 class VehicleListResponse(BaseModel):
     items: List[VehicleResponse]
     metadata: PaginationMetadata
+
+class VehicleSearchResponse(BaseModel):
+    total_records: int
+    total_pages: int
+    current_page: int
+    page_size: int
+    results: List[VehicleResponse]

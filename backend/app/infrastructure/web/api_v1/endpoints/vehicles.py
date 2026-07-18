@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from typing import Optional
+from decimal import Decimal
 import math
 
 from app.infrastructure.web.dependencies import (
@@ -15,7 +16,8 @@ from app.infrastructure.web.schemas.vehicle import (
     VehicleUpdate,
     VehicleResponse,
     VehicleListResponse,
-    PaginationMetadata
+    PaginationMetadata,
+    VehicleSearchResponse
 )
 
 router = APIRouter()
@@ -58,6 +60,50 @@ def get_vehicles(
         total_pages=total_pages
     )
     return VehicleListResponse(items=vehicles, metadata=metadata)
+
+@router.get("/search", response_model=VehicleSearchResponse)
+def search_vehicles(
+    make: Optional[str] = Query(None),
+    model: Optional[str] = Query(None),
+    category: Optional[str] = Query(None),
+    minimum_price: Optional[Decimal] = Query(None),
+    maximum_price: Optional[Decimal] = Query(None),
+    minimum_quantity: Optional[int] = Query(None),
+    availability: Optional[bool] = Query(None),
+    sort_by: Optional[str] = Query(None),
+    order: str = Query("asc"),
+    page: int = Query(1),
+    limit: int = Query(10),
+    current_user: User = Depends(get_current_user),
+    vehicle_service: VehicleService = Depends(get_vehicle_service)
+):
+    try:
+        results, total_records = vehicle_service.search_and_filter_vehicles(
+            make=make,
+            model=model,
+            category=category,
+            min_price=minimum_price,
+            max_price=maximum_price,
+            min_quantity=minimum_quantity,
+            availability=availability,
+            sort_by=sort_by,
+            order=order,
+            page=page,
+            limit=limit
+        )
+        total_pages = math.ceil(total_records / limit) if total_records > 0 else 0
+        return VehicleSearchResponse(
+            total_records=total_records,
+            total_pages=total_pages,
+            current_page=page,
+            page_size=limit,
+            results=results
+        )
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
 
 @router.get("/{id}", response_model=VehicleResponse)
 def get_vehicle_by_id(

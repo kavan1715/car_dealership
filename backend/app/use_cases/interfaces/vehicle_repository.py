@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from typing import List, Optional, Tuple
+from decimal import Decimal
 from app.infrastructure.persistence.models.vehicle import Vehicle
 
 class IVehicleRepository(ABC):
@@ -38,6 +39,24 @@ class IVehicleRepository(ABC):
     @abstractmethod
     def search(self, make: Optional[str] = None, model: Optional[str] = None) -> List[Vehicle]:
         """Search vehicles filtering by make and/or model (case-insensitive partial matches)."""
+        pass
+
+    @abstractmethod
+    def search_and_filter(
+        self,
+        make: Optional[str] = None,
+        model: Optional[str] = None,
+        category: Optional[str] = None,
+        min_price: Optional[Decimal] = None,
+        max_price: Optional[Decimal] = None,
+        min_quantity: Optional[int] = None,
+        availability: Optional[bool] = None,
+        sort_by: Optional[str] = None,
+        order: str = "asc",
+        offset: int = 0,
+        limit: int = 10
+    ) -> Tuple[List[Vehicle], int]:
+        """Dynamically search and filter vehicles in the inventory and return a paginated slice and total count."""
         pass
 
     @abstractmethod
