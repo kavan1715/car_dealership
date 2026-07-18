@@ -443,6 +443,64 @@ curl -X GET "http://localhost:8000/api/v1/vehicles/search?make=BMW&category=SUV&
 
 ---
 
+## Inventory Management (Purchase & Restock)
+
+We implement a secure and transaction-safe Vehicle Inventory Management system supporting atomic increments/decrements and transaction rollbacks.
+
+### 1. Operations vs. CRUD
+*   **Business Operations**: CRUD represents simple data mutations. Purchasing and restocking represent business events. Restocking updates inventory balances and checks authorization tiers. Purchasing checks item availability, decreases quantities exactly by one, and generates transaction side-effects, keeping business logic distinct from generic writes.
+*   **Transaction Safety**: Mutation methods in the repository use `try-except` blocks with database `rollback()` overrides to ensure that any transient DB failures roll back all modifications cleanly.
+
+### 2. Authorization Rules
+*   **Purchase Endpoint**: Available to **Authenticated Customers or Admins** (`Depends(get_current_user)`).
+*   **Restock Endpoint**: Available to **Admins Only** (`Depends(get_current_admin)`).
+
+### 3. API Examples
+
+#### Purchase Vehicle Request Example
+```bash
+curl -X POST "http://localhost:8000/api/v1/vehicles/1/purchase" \
+     -H "Authorization: Bearer <CUSTOMER_JWT_TOKEN>"
+```
+
+#### Purchase Vehicle Response (200 OK)
+```json
+{
+  "id": 1,
+  "make": "Ford",
+  "model": "Mustang",
+  "category": "Sports",
+  "price": "45000.00",
+  "quantity": 4,
+  "created_at": "2026-07-18T18:00:00Z",
+  "updated_at": "2026-07-18T18:30:00Z"
+}
+```
+
+#### Restock Vehicle Request Example
+```bash
+curl -X POST "http://localhost:8000/api/v1/vehicles/1/restock" \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Bearer <ADMIN_JWT_TOKEN>" \
+     -d '{"quantity": 5}'
+```
+
+#### Restock Vehicle Response (200 OK)
+```json
+{
+  "id": 1,
+  "make": "Ford",
+  "model": "Mustang",
+  "category": "Sports",
+  "price": "45000.00",
+  "quantity": 9,
+  "created_at": "2026-07-18T18:00:00Z",
+  "updated_at": "2026-07-18T18:35:00Z"
+}
+```
+
+---
+
 ## Deployment Guide
 *(To be completed in future deployment phases)*
 

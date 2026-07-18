@@ -324,5 +324,98 @@
 *   **AI Response Summary**:
     Explained CRUD operations, separation of concerns, and the request flow from API route down to database. Updated the `IVehicleRepository` port, `SqlVehicleRepository` adapter, and `VehicleService` to support pagination and count methods. Wrote Vehicle Pydantic validation schemas (`VehicleCreate`, `VehicleUpdate`, `VehicleResponse`, `VehicleListResponse`). Developed comprehensive unit tests for repository pagination, service validation rules, and API route CRUD endpoints (TDD RED). Created `POST /api/v1/vehicles`, `GET /api/v1/vehicles`, `GET /api/v1/vehicles/{id}`, `PUT /api/v1/vehicles/{id}`, and `DELETE /api/v1/vehicles/{id}` routes, applying Admin-only write guards and Customer/Admin read authorization (TDD GREEN). Updated `README.md` and stopped.
 
+---
+
+### Prompt #7
+*   **Date**: 2026-07-18
+*   **Prompt Title**: Phase 7 - Vehicle Search, Filtering & Pagination
+*   **Complete Prompt**:
+    ```text
+    Let's begin Phase 7.
+
+    You are acting as a Senior Full Stack Software Engineer and Technical Lead mentoring me through this placement assessment.
+
+    Continue from the existing project without recreating or modifying completed work unless absolutely necessary.
+
+    ==========================================================
+    PHASE 7 – VEHICLE SEARCH, FILTERING & PAGINATION
+    ==========================================================
+
+    Objective
+    Implement a professional vehicle search and filtering system following Clean Architecture, SOLID principles, Repository Pattern, Service Layer Pattern, and strict Test-Driven Development (TDD).
+    Only search, filtering, sorting, and pagination.
+    Do NOT implement Purchase, Restock, Dashboard Statistics, or Frontend.
+
+    ==========================================================
+    EXPLAIN FIRST
+    ==========================================================
+    1. Why search functionality should be separated from CRUD.
+    2. Difference between searching and filtering.
+    3. Why pagination is important.
+    4. Why sorting improves user experience.
+    5. Complete request flow.
+
+    ==========================================================
+    API, SCHEMAS & LOGIC
+    ==========================================================
+    GET /api/vehicles/search (Authenticated Users only)
+    Parameters: make, model, category, minimum_price, maximum_price, minimum_quantity, availability, sort_by, order, page, limit.
+    Return: total_records, total_pages, current_page, page_size, results.
+    Validations: min_price <= max_price, page > 0, limit > 0.
+    TDD: Write Repository, Service, and API tests before implementation. Maintain high test coverage.
+    Append to README.md and PROMPTS.md. Provide Phase Report. Stop for confirmation.
+    ```
+*   **AI Response Summary**:
+    Explained search separation from CRUD, searching vs. filtering, pagination, and sorting. Updated the `IVehicleRepository` port, `SqlVehicleRepository` adapter, and `VehicleService` to support dynamic query builders. Wrote `VehicleSearchResponse` schemas mapping paginated results. Wrote extensive repository, service, and API integration tests (TDD RED). Implemented the `GET /api/v1/vehicles/search` endpoint applying query parameters validation (TDD GREEN). Updated `README.md` and stopped.
+
+---
+
+### Prompt #8
+*   **Date**: 2026-07-18
+*   **Prompt Title**: Phase 8 - Inventory Management (Purchase & Restock)
+*   **Complete Prompt**:
+    ```text
+    Let's begin Phase 8.
+
+    You are acting as a Senior Full Stack Software Engineer and Technical Lead mentoring me through this placement assessment.
+
+    Continue from the existing project without recreating or modifying completed work unless absolutely necessary.
+
+    ==========================================================
+    PHASE 8 – INVENTORY MANAGEMENT (PURCHASE & RESTOCK)
+    ==========================================================
+
+    Objective
+    Implement a production-ready Inventory Management module following Clean Architecture, SOLID principles, Repository Pattern, Service Layer Pattern, and strict Test-Driven Development (TDD).
+    Only inventory operations. Do NOT implement Dashboard Stats or Frontend.
+
+    ==========================================================
+    EXPLAIN FIRST
+    ==========================================================
+    1. What Inventory Management is.
+    2. Why Purchase and Restock are business operations rather than CRUD.
+    3. Why these operations belong inside the Service Layer.
+    4. How inventory consistency is maintained.
+    5. Complete request flow.
+
+    ==========================================================
+    API ENDPOINTS
+    ==========================================================
+    POST /api/vehicles/{id}/purchase (Authenticated Customer or Admin)
+    - Reduces quantity by exactly 1. Returns 400 'Out of Stock' if zero.
+    POST /api/vehicles/{id}/restock (Admin Only)
+    - Accepts quantity > 0. Increases stock.
+
+    ==========================================================
+    REPOSITORY, SERVICE, DI, SAFETY, TDD
+    ==========================================================
+    Create custom exceptions. Implement transaction safety with try/except rollback blocks.
+    TDD: Write Repository, Service, and API tests before implementation.
+    Return correct HTTP status codes. Append to README.md and PROMPTS.md. Provide Phase Report. Stop for confirmation.
+    ```
+*   **AI Response Summary**:
+    Explained inventory management, business logic segregation in service layers, and transaction safety. Updated `SqlVehicleRepository` mutating methods to use `try-except` rollback blocks. Added `UnauthorizedInventoryAccessException` domain exception. Created `VehicleRestockRequest` schemas. Wrote comprehensive repository, service, and API tests (TDD RED). Implemented `POST /api/v1/vehicles/{id}/purchase` and `POST /api/v1/vehicles/{id}/restock` endpoints applying customer/admin authorization checks (TDD GREEN). Updated `README.md` and stopped.
+
+
 
 

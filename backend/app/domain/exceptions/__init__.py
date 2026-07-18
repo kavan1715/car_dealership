@@ -33,3 +33,9 @@ class InvalidQuantityException(DomainException):
     def __init__(self, message: str = "Quantity must be greater than zero."):
         self.message = message
         super().__init__(self.message)
+
+class UnauthorizedInventoryAccessException(DomainException):
+    """Raised when an unauthorized user attempts to access or modify inventory"""
+    def __init__(self, message: str = "Unauthorized inventory access."):
+        self.message = message
+        super().__init__(self.message)

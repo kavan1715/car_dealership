@@ -58,3 +58,6 @@ class VehicleSearchResponse(BaseModel):
     current_page: int
     page_size: int
     results: List[VehicleResponse]
+
+class VehicleRestockRequest(BaseModel):
+    quantity: int = Field(..., gt=0)

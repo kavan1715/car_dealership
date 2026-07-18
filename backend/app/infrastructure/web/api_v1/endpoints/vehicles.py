@@ -10,14 +10,19 @@ from app.infrastructure.web.dependencies import (
 )
 from app.use_cases.vehicle_service import VehicleService
 from app.infrastructure.persistence.models.user import User
-from app.domain.exceptions import VehicleNotFoundException
+from app.domain.exceptions import (
+    VehicleNotFoundException,
+    OutOfStockException,
+    InvalidQuantityException
+)
 from app.infrastructure.web.schemas.vehicle import (
     VehicleCreate,
     VehicleUpdate,
     VehicleResponse,
     VehicleListResponse,
     PaginationMetadata,
-    VehicleSearchResponse
+    VehicleSearchResponse,
+    VehicleRestockRequest
 )
 
 router = APIRouter()
@@ -157,6 +162,47 @@ def delete_vehicle(
     try:
         vehicle_service.delete_vehicle(id)
         return {"message": "Vehicle successfully deleted."}
+    except VehicleNotFoundException as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e)
+        )
+
+@router.post("/{id}/purchase", response_model=VehicleResponse, status_code=status.HTTP_200_OK)
+def purchase_vehicle(
+    id: int,
+    current_user: User = Depends(get_current_user),
+    vehicle_service: VehicleService = Depends(get_vehicle_service)
+):
+    try:
+        updated_vehicle = vehicle_service.purchase_vehicle(id, 1)
+        return updated_vehicle
+    except OutOfStockException:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Out of Stock"
+        )
+    except VehicleNotFoundException as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e)
+        )
+
+@router.post("/{id}/restock", response_model=VehicleResponse, status_code=status.HTTP_200_OK)
+def restock_vehicle(
+    id: int,
+    payload: VehicleRestockRequest,
+    current_admin: User = Depends(get_current_admin),
+    vehicle_service: VehicleService = Depends(get_vehicle_service)
+):
+    try:
+        updated_vehicle = vehicle_service.restock_vehicle(id, payload.quantity)
+        return updated_vehicle
+    except InvalidQuantityException as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
     except VehicleNotFoundException as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

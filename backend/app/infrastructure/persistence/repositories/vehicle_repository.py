@@ -12,10 +12,14 @@ class SqlVehicleRepository(IVehicleRepository):
         self.db = db
 
     def create(self, vehicle: Vehicle) -> Vehicle:
-        self.db.add(vehicle)
-        self.db.commit()
-        self.db.refresh(vehicle)
-        return vehicle
+        try:
+            self.db.add(vehicle)
+            self.db.commit()
+            self.db.refresh(vehicle)
+            return vehicle
+        except Exception:
+            self.db.rollback()
+            raise
 
     def get_by_id(self, vehicle_id: int) -> Optional[Vehicle]:
         return self.db.query(Vehicle).filter(Vehicle.id == vehicle_id).first()
@@ -27,16 +31,24 @@ class SqlVehicleRepository(IVehicleRepository):
         return self.db.query(Vehicle).count()
 
     def update(self, vehicle: Vehicle) -> Vehicle:
-        self.db.commit()
-        self.db.refresh(vehicle)
-        return vehicle
+        try:
+            self.db.commit()
+            self.db.refresh(vehicle)
+            return vehicle
+        except Exception:
+            self.db.rollback()
+            raise
 
     def delete(self, vehicle_id: int) -> bool:
         vehicle = self.get_by_id(vehicle_id)
         if vehicle:
-            self.db.delete(vehicle)
-            self.db.commit()
-            return True
+            try:
+                self.db.delete(vehicle)
+                self.db.commit()
+                return True
+            except Exception:
+                self.db.rollback()
+                raise
         return False
 
     def search(self, make: Optional[str] = None, model: Optional[str] = None) -> List[Vehicle]:
@@ -103,15 +115,23 @@ class SqlVehicleRepository(IVehicleRepository):
     def purchase(self, vehicle_id: int, quantity: int) -> Vehicle:
         vehicle = self.get_by_id(vehicle_id)
         if vehicle:
-            vehicle.quantity -= quantity
-            self.db.commit()
-            self.db.refresh(vehicle)
+            try:
+                vehicle.quantity -= quantity
+                self.db.commit()
+                self.db.refresh(vehicle)
+            except Exception:
+                self.db.rollback()
+                raise
         return vehicle
 
     def restock(self, vehicle_id: int, quantity: int) -> Vehicle:
         vehicle = self.get_by_id(vehicle_id)
         if vehicle:
-            vehicle.quantity += quantity
-            self.db.commit()
-            self.db.refresh(vehicle)
+            try:
+                vehicle.quantity += quantity
+                self.db.commit()
+                self.db.refresh(vehicle)
+            except Exception:
+                self.db.rollback()
+                raise
         return vehicle
