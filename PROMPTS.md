@@ -108,3 +108,82 @@
     ```
 *   **AI Response Summary**:
     Updated the `.env.example` to use `psycopg` (Psycopg 3), resolved Python 3.13 pip installation build issues on Windows by utilizing unpinned and updated versions, and fully implemented SQLAlchemy 2.0 configuration, `SessionLocal`, dependency injection (`get_db`), and Alembic migrations. Developed database connectivity unit and API health check endpoint tests (TDD), which verified successfully. Provided detailed setup instructions, migration commands, and suggested git commit. Exited and stopped for user confirmation.
+
+---
+
+### Prompt #4
+*   **Date**: 2026-07-18
+*   **Prompt Title**: Phase 3 - Domain Models & Database Schema
+*   **Complete Prompt**:
+    ```text
+    Let's begin Phase 3.
+
+    You are acting as a Senior Full Stack Software Engineer and Technical Lead mentoring me through this placement assessment.
+
+    Continue from the existing project without recreating or modifying completed work unless necessary.
+
+    ==========================================================
+    PHASE 3 – DOMAIN MODELS & DATABASE SCHEMA
+    ==========================================================
+
+    Objective
+
+    Implement the project's domain models following Clean Architecture and Test-Driven Development (TDD).
+
+    This phase should only focus on the database schema and SQLAlchemy models.
+
+    Do NOT implement authentication or API endpoints yet.
+
+    ==========================================================
+    TASKS
+    ==========================================================
+
+    1. Explain the purpose of SQLAlchemy Models and how they map to PostgreSQL tables.
+
+    2. Create the following models:
+
+    User
+    Fields: id, name, email, hashed_password, role (Customer/Admin), created_at
+
+    Vehicle
+    Fields: id, make, model, category, price, quantity, created_at, updated_at
+
+    ==========================================================
+    DATABASE DESIGN
+    ==========================================================
+    Use appropriate SQLAlchemy column types.
+    Apply Primary Keys, Unique Constraint on Email, Indexes where appropriate, NOT NULL constraints, Default timestamps, Enum for User Roles (preferred) or validated string.
+    Use SQLAlchemy 2.0 style.
+
+    ==========================================================
+    TDD REQUIREMENT
+    ==========================================================
+    STRICTLY follow RED -> GREEN -> REFACTOR.
+    Before implementing models, write meaningful tests first.
+    Tests should verify User model creation, Vehicle model creation, default values, email uniqueness, table metadata, and model constraints.
+    Only after writing the tests should you implement the models.
+    Explain each TDD step.
+
+    ==========================================================
+    ALEMBIC
+    ==========================================================
+    After the models are complete, generate a new Alembic migration.
+    Explain what Alembic detected, what migration file was created, and what SQL changes will occur.
+    Provide the commands:
+    alembic revision --autogenerate -m "create users and vehicles tables"
+    alembic upgrade head
+    Do NOT execute the commands.
+
+    ==========================================================
+    VERIFY DATABASE
+    ==========================================================
+    After migration, explain how I can verify that PostgreSQL now contains users, vehicles, alembic_version.
+
+    ==========================================================
+    README / PROMPTS / CODE QUALITY / DO NOT IMPLEMENT / REPORT
+    ==========================================================
+    [Include update constraints, append rules, SOLID, Clean Architecture, report formats, and wait instruction]
+    ```
+*   **AI Response Summary**:
+    Explained the mechanics of SQLAlchemy ORM mapping. Wrote database metadata and schema unit tests (TDD RED). Created `User` (with `UserRole` enum) and `Vehicle` models in modern SQLAlchemy 2.0 style (Mapped, mapped_column), registering them in the `models` module package. Ran pytest to verify all tests passed (TDD GREEN). Configured Alembic `env.py` schema loading and generated the dialect-agnostic migration file. Updated `README.md` with documentation and an ER diagram. Logged prompts and exited waiting for Phase 4.
+

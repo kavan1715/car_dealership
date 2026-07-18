@@ -113,6 +113,69 @@ Car_Dealership/
 
 ---
 
+## Database Schema & Entities
+
+The relational database schema is configured in `app/infrastructure/persistence/models/` and managed using Alembic.
+
+### Entity-Relationship Diagram
+```mermaid
+erDiagram
+    users {
+        int id PK "auto-increment"
+        varchar name "NOT NULL (100)"
+        varchar email UK "NOT NULL (255), INDEX"
+        varchar hashed_password "NOT NULL (255)"
+        enum role "NOT NULL (Customer/Admin)"
+        timestamp created_at "NOT NULL, DEFAULT now()"
+    }
+    vehicles {
+        int id PK "auto-increment"
+        varchar make "NOT NULL (100), INDEX"
+        varchar model "NOT NULL (100), INDEX"
+        varchar category "NOT NULL (50)"
+        numeric price "NOT NULL (12,2)"
+        int quantity "NOT NULL, DEFAULT 0"
+        timestamp created_at "NOT NULL, DEFAULT now()"
+        timestamp updated_at "NOT NULL, DEFAULT now()"
+    }
+```
+
+### User Entity Schema
+*   **Table Name**: `users`
+*   **Primary Key**: `id` (Integer, auto-incrementing)
+*   **Fields**:
+    *   `name`: `VARCHAR(100)`, NOT NULL — User's display name.
+    *   `email`: `VARCHAR(255)`, NOT NULL, UNIQUE, INDEX — User's email address.
+    *   `hashed_password`: `VARCHAR(255)`, NOT NULL — Cryptographic hash of the password.
+    *   `role`: `ENUM('Customer', 'Admin')`, NOT NULL, default `'Customer'` — Authorization role.
+    *   `created_at`: `TIMESTAMP`, NOT NULL, default server-side current timestamp.
+
+### Vehicle Entity Schema
+*   **Table Name**: `vehicles`
+*   **Primary Key**: `id` (Integer, auto-incrementing)
+*   **Fields**:
+    *   `make`: `VARCHAR(100)`, NOT NULL, INDEX — Car manufacturer.
+    *   `model`: `VARCHAR(100)`, NOT NULL, INDEX — Car model.
+    *   `category`: `VARCHAR(50)`, NOT NULL — Vehicle segment (e.g. Sedan, SUV).
+    *   `price`: `NUMERIC(12, 2)`, NOT NULL — Vehicle price.
+    *   `quantity`: `INTEGER`, NOT NULL, default `0` — In-stock count.
+    *   `created_at`: `TIMESTAMP`, NOT NULL, default server-side current timestamp.
+    *   `updated_at`: `TIMESTAMP`, NOT NULL, default server-side current timestamp, auto-updated.
+
+### Database Migration Instructions
+To generate and apply database schema updates using Alembic:
+1.  **Generate Migration Script**:
+    ```bash
+    cd backend
+    .venv\Scripts\alembic.exe revision --autogenerate -m "create users and vehicles tables"
+    ```
+2.  **Apply Migration to Database**:
+    ```bash
+    .venv\Scripts\alembic.exe upgrade head
+    ```
+
+---
+
 ## Installation Guide
 
 ### Prerequisites
