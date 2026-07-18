@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Database Service Placeholder
+  db:
+    image: postgres:15-alpine
+    container_name: car_dealership_db
+    # Environment variables, volumes, and ports structure here (no active config)
+    # environment:
+    #   - POSTGRES_USER
+    #   - POSTGRES_PASSWORD
+    #   - POSTGRES_DB
+    # ports:
+    #   - "5432:5432"
+    # volumes:
+    #   - pgdata:/var/lib/postgresql/data
+
+  # Backend Service Placeholder
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: car_dealership_backend
+    # ports, volumes, environment, depends_on structure here (no active config)
+    # ports:
+    #   - "8000:8000"
+    # depends_on:
+    #   - db
+
+  # Frontend Service Placeholder
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: car_dealership_frontend
+    # ports, volumes structure here (no active config)
+    # ports:
+    #   - "5173:5173"
+
+volumes:
+  pgdata:
