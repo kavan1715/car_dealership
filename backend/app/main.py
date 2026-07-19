@@ -7,6 +7,8 @@ from app.infrastructure.web.api_v1.router import api_router
 from app.infrastructure.persistence.models.user import User
 from app.infrastructure.persistence.models.vehicle import Vehicle
 
+from fastapi.middleware.cors import CORSMiddleware
+
 # Create all database tables automatically on startup
 Base.metadata.create_all(bind=engine)
 
@@ -14,6 +16,15 @@ app = FastAPI(
     title="Car Dealership API",
     description="Enterprise-grade Clean Architecture Backend API for Car Dealership",
     version="1.0.0"
+)
+
+# Enable CORS for public endpoints and cross-origin frontend requests
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Include the API router
