@@ -57,10 +57,9 @@ export const EditVehiclePage = () => {
         setValue('price', data.price.toString());
         setValue('quantity', data.quantity.toString());
 
-        // Prefill photo from localStorage
-        const storedPhoto = localStorage.getItem(`vehicle_image_${id}`);
-        if (storedPhoto) {
-          setPhotoBase64(storedPhoto);
+        // Prefill photo from backend database response
+        if (data.image_src) {
+          setPhotoBase64(data.image_src);
         }
       } catch (err) {
         toast.error('Failed to load vehicle specifications.');
@@ -93,15 +92,10 @@ export const EditVehiclePage = () => {
         category: data.category,
         price: parseFloat(data.price),
         quantity: parseInt(data.quantity, 10),
+        image_src: photoBase64 || null,
       };
 
       await api.put(`/vehicles/${id}`, payload);
-
-      // Save photo to localStorage
-      if (photoBase64) {
-        localStorage.setItem(`vehicle_image_${id}`, photoBase64);
-      }
-
       toast.success('Specifications updated successfully!');
       navigate('/admin/vehicles');
     } catch (err) {

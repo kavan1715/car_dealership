@@ -39,7 +39,8 @@ def create_vehicle(
             model=payload.model,
             category=payload.category,
             price=payload.price,
-            quantity=payload.quantity
+            quantity=payload.quantity,
+            image_src=payload.image_src
         )
         return vehicle
     except ValueError as e:
@@ -139,7 +140,8 @@ def update_vehicle(
             model=payload.model,
             category=payload.category,
             price=payload.price,
-            quantity=payload.quantity
+            quantity=payload.quantity,
+            image_src=payload.image_src
         )
         return vehicle
     except VehicleNotFoundException as e:

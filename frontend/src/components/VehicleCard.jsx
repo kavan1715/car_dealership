@@ -2,7 +2,7 @@ import React from 'react';
 import { Sparkles, ShoppingBag } from 'lucide-react';
 
 export const VehicleCard = ({ vehicle, onPurchase }) => {
-  const { id, make, model, category, price, quantity } = vehicle;
+  const { id, make, model, category, price, quantity, image_src } = vehicle;
   const isOutOfStock = quantity === 0;
 
   // Formatter for currency
@@ -17,10 +17,9 @@ export const VehicleCard = ({ vehicle, onPurchase }) => {
 
   // Curated premium images mapping based on category/make/model to look premium
   const getCarPlaceholderImage = () => {
-    // Check if there is an uploaded image in localStorage
-    const uploadedImage = localStorage.getItem(`vehicle_image_${id}`);
-    if (uploadedImage) {
-      return uploadedImage;
+    // Check if there is a database-stored image
+    if (image_src) {
+      return image_src;
     }
     // Generates a stylized backdrop image using Unsplash (reusable asset placeholders)
     if (category.toLowerCase() === 'suv') {

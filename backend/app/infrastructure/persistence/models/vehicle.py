@@ -1,3 +1,4 @@
+from typing import Optional
 from datetime import datetime
 from decimal import Decimal
 from sqlalchemy import String, Numeric, func
@@ -15,6 +16,7 @@ class Vehicle(Base):
     category: Mapped[str] = mapped_column(String(50), nullable=False)
     price: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
     quantity: Mapped[int] = mapped_column(nullable=False, default=0)
+    image_src: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         nullable=False, 
         server_default=func.now(),

@@ -9,6 +9,7 @@ class VehicleCreate(BaseModel):
     category: str = Field(..., min_length=1)
     price: Decimal = Field(..., gt=0)
     quantity: int = Field(default=0, ge=0)
+    image_src: Optional[str] = Field(default=None)
 
     @field_validator("make", "model", "category")
     @classmethod
@@ -21,6 +22,7 @@ class VehicleUpdate(BaseModel):
     category: Optional[str] = Field(default=None, min_length=1)
     price: Optional[Decimal] = Field(default=None, gt=0)
     quantity: Optional[int] = Field(default=None, ge=0)
+    image_src: Optional[str] = Field(default=None)
 
     @field_validator("make", "model", "category")
     @classmethod
@@ -36,6 +38,7 @@ class VehicleResponse(BaseModel):
     category: str
     price: Decimal
     quantity: int
+    image_src: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 

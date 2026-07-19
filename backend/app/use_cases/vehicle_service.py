@@ -14,7 +14,7 @@ class VehicleService:
     def __init__(self, vehicle_repo: IVehicleRepository):
         self.vehicle_repo = vehicle_repo
 
-    def create_vehicle(self, make: str, model: str, category: str, price: Decimal, quantity: int = 0) -> Vehicle:
+    def create_vehicle(self, make: str, model: str, category: str, price: Decimal, quantity: int = 0, image_src: Optional[str] = None) -> Vehicle:
         # Validations
         if not make or not make.strip():
             raise ValueError("Make cannot be empty.")
@@ -32,7 +32,8 @@ class VehicleService:
             model=model.strip(),
             category=category.strip(),
             price=price,
-            quantity=quantity
+            quantity=quantity,
+            image_src=image_src
         )
         return self.vehicle_repo.create(vehicle)
 
@@ -110,7 +111,8 @@ class VehicleService:
         model: Optional[str] = None, 
         category: Optional[str] = None, 
         price: Optional[Decimal] = None,
-        quantity: Optional[int] = None
+        quantity: Optional[int] = None,
+        image_src: Optional[str] = None
     ) -> Vehicle:
         vehicle = self.get_vehicle_by_id(vehicle_id)
 
@@ -138,6 +140,9 @@ class VehicleService:
             if quantity < 0:
                 raise ValueError("Quantity must be non-negative.")
             vehicle.quantity = quantity
+
+        if image_src is not None:
+            vehicle.image_src = image_src
 
         return self.vehicle_repo.update(vehicle)
 

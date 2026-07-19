@@ -62,16 +62,10 @@ export const AddVehiclePage = () => {
         category: data.category,
         price: parseFloat(data.price),
         quantity: parseInt(data.quantity, 10),
+        image_src: photoBase64 || null,
       };
 
-      const response = await api.post('/vehicles', payload);
-      const newId = response.data.id;
-      
-      // Store the image in localStorage under the vehicle's unique ID
-      if (photoBase64) {
-        localStorage.setItem(`vehicle_image_${newId}`, photoBase64);
-      }
-
+      await api.post('/vehicles', payload);
       toast.success('Vehicle added successfully!');
       navigate('/admin/vehicles');
     } catch (err) {
