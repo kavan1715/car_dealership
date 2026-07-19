@@ -1,9 +1,19 @@
 import os
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import Field
+from pydantic import Field, field_validator
 
 class Settings(BaseSettings):
     DATABASE_URL: str = Field(default="postgresql+psycopg://postgres:postgres_password@localhost:5432/car_dealership")
+    
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def normalize_db_url(cls, v: str) -> str:
+        if v and v.startswith("postgres://"):
+            v = v.replace("postgres://", "postgresql+psycopg://", 1)
+        elif v and v.startswith("postgresql://") and "+psycopg" not in v:
+            v = v.replace("postgresql://", "postgresql+psycopg://", 1)
+        return v
+
     SECRET_KEY: str = Field(default="replace_with_a_very_long_random_secure_secret_key_here")
     JWT_ALGORITHM: str = Field(default="HS256")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default=30)
